@@ -67,45 +67,85 @@ void inputdeal(void)
     }
 }
 
+/**处理类似"1,2;3,4"的结构，解析成二维数组**/
+void inputdeal2(void)
+{
+	int n;
+	cin>>n;
+	
+	vector<vector<int>> in;
+	
+	int temp;
+	vector<int> tem;
+	
+	while(cin>>temp)
+	{
+		tem.push_back(temp);
+		char var = cin.get();
+		if(var == '\n' )
+		{ 
+			in.push_back(tem);
+			break;
+		}
+		else if(var == ';')
+		{
+			in.push_back(tem);
+			tem.resize(0);
+		} 
+	}
+	
+	
+	
+	
+	for(const auto& e : in){
+        for(const auto& i : e)
+            cout << i << ' ';
+        cout << '\n';
+    }
+
+}
+
 
 /***输入是字符串逗号间隔解析成数组（支持负数），输出带逗号间隔的数组****/
 string compileSeq(string input) {
-        // write code here
-        //去除','转换成数组
-        int flag = 0;
-        int len=input.length();
+    // write code here
+    //去除','转换成数组
+    int flag = 0;
+    int len=input.length();
 
-        vector<int> nums;
-        int i = 0;
-        while(i < len)
+    vector<int> nums;
+    int i = 0;
+    while(i < len)
+    {
+        string number;
+        while(i < len && input[i]!=',')
         {
-            string number;
-            while(i < len && input[i]!=',')
-            {
-                number += input[i];
-                i++;
-            }
-            if(number[0] != '-')
-            {
-            	nums.push_back(stoi(number));
-            }
-            else
-            {           	
-                nums.push_back(stoi(number.substr(1))*(-1));
-            }
+            number += input[i];
             i++;
         }
-        
-        int n = nums.size();
-
-        string ans;
-        for(int i= 0;i < n;i++)
+        if(number[0] != '-')
         {
-        	ans+=','+to_string(nums[i]);
-		}
-               
-        return ans.substr(1);
+        	nums.push_back(stoi(number));
+        }
+        else
+        {           	
+            nums.push_back(stoi(number.substr(1))*(-1));
+        }
+        i++;
     }
+    
+    int n = nums.size();
+
+    string ans;
+    for(int i= 0;i < n;i++)
+    {
+    	ans+=','+to_string(nums[i]);
+	}
+           
+    return ans.substr(1);
+}
+
+    
     
 int main()
 {
