@@ -1,3 +1,7 @@
+#include<iostream>
+using namespace std;
+#include <vector>
+#include <limits>
 #include <stdio.h>  
 #include <assert.h>  //断言头文件
 #include <stdlib.h>  
@@ -21,7 +25,7 @@ https://blog.csdn.net/yushiyi6453/article/details/76407640
 void BubbleSort(int array[], int n);
 void selectSort(int array[], int n);
 void insertSort(int array[], int n);
-void MergeSort(int k[],int n); 
+void MergeSort(vector<int> &Array, int front, int end);
 void adjust_quicksort(int k[],int n); 
 void quicksort(int a[], int left, int right);  
 void heapSort(int array[], int n);
@@ -31,6 +35,15 @@ void LSDSort(int *a, int n);
 
 
 void printArray(int array[], int size)
+{
+	int i=0;
+    for(i=0; i<size; i++)
+    {
+        printf("%d ", array[i]);
+    }
+}
+
+void printVArray(vector<int> &array, int size)
 {
 	int i=0;
     for(i=0; i<size; i++)
@@ -55,10 +68,13 @@ int main(void)
 //    }  
 
     int array[49] = {1332802,1177178,1514891,871248,753214,123866,1615405,328656,1540395,968891,1884022,252932,1034406,1455178,821713,486232,860175,1896237,852300,566715,1285209,1845742,883142,259266,520911,1844960,218188,1528217,332380,261485,1111670,16920,1249664,1199799,1959818,1546744,1904944,51047,1176397,190970,48715,349690,673887,1648782,1010556,1165786,937247,986578,798663};
-    adjust_quicksort(array, 49);  
-    printArray(array, 49);  
     
-    printf("\n%d ", array[49-24]);
+	vector<int> varray = {1332802,1177178,1514891,871248,753214,123866,1615405,328656,1540395,968891,1884022,252932,1034406,1455178,821713,486232,860175,1896237,852300,566715,1285209,1845742,883142,259266,520911,1844960,218188,1528217,332380,261485,1111670,16920,1249664,1199799,1959818,1546744,1904944,51047,1176397,190970,48715,349690,673887,1648782,1010556,1165786,937247,986578,798663};
+    //adjust_quicksort(array, 49); 
+	MergeSort(varray,0,varray.size()-1);
+    printVArray(varray, 49);  
+    
+    //printf("\n%d ", array[49-24]);
 
     //free(array);  
     return 0;  
@@ -83,17 +99,21 @@ void BubbleSort(int array[], int n)
 	}
 }
 
-
+/*
+首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，
+然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。
+以此类推，直到所有元素均排序完毕。 
+*/
 void selectSort(int array[], int n)
 {
 	int i = 0;
 	int j = 0;
 	int temp;
-	int min;
+	int min;  //最小值的index
 	for(i = 0; i < n-1;i++)
 	{
 		min = i;				//从第i个开始找
-		for( j=i+1; j<n; j++)
+		for( j=i+1; j<n; j++)   //从i之后的数组中找到最小的数
         {
             if(array[min]>array[j])
             {
@@ -101,7 +121,7 @@ void selectSort(int array[], int n)
             }
         }
 
-		if(min != i)
+		if(min != i)         //交换位置
 		{
 			temp = array[i];
 			array[i] = array[min];
@@ -168,8 +188,39 @@ void quicksort(int a[], int left, int right)
     quicksort(a,i+1,right);//继续处理右边的 ，这里是一个递归的过程  
 } 
 
+void Merge(vector<int> &Array, int front, int mid, int end)
+{
+	vector<int> LeftSubArray(Array.begin() + front, Array.begin() + mid + 1);
+	vector<int> RightSubArray(Array.begin() + mid + 1,Array.begin() + end + 1);
+	
+	int idxLeft = 0, idxRight = 0;
+	
+	LeftSubArray.insert(LeftSubArray.end(), numeric_limits<int>::max());
+    RightSubArray.insert(RightSubArray.end(), numeric_limits<int>::max());
+    // Pick min of LeftSubArray[idxLeft] and RightSubArray[idxRight], and put into Array[i]
+    for (int i = front; i <= end; i++) {
+        if (LeftSubArray[idxLeft] < RightSubArray[idxRight]) {
+            Array[i] = LeftSubArray[idxLeft];
+            idxLeft++;
+        } else {
+            Array[i] = RightSubArray[idxRight];
+            idxRight++;
+        }
+    }
+}
 
 
+void MergeSort(vector<int> &Array, int front, int end)
+{
+	if(front >= end)
+		return;
+	
+	int mid = (front+end)/2;
+	
+	MergeSort(Array, front, mid);
+    MergeSort(Array, mid + 1, end);
+    Merge(Array, front, mid, end);
+}
 
 
 
