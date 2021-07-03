@@ -190,13 +190,34 @@ int Partition(SqList *L,int low,int high)
 	return low; /* 返回枢轴所在位置 */
 }
 
+/* 交换顺序表L中子表的记录，使枢轴记录到位，并返回其所在位置 */
+/* 此时在它之前(后)的记录均不大(小)于它。 */
+int Partition1(SqList *L,int low,int high)
+{ 
+	int pivotkey;
+
+	pivotkey=L->r[low]; /* 用子表的第一个记录作枢轴记录 */
+	L->r[0] = pivotkey;
+	while(low<high) /*  从表的两端交替地向中间扫描 */
+	{ 
+		 while(low<high&&L->r[high]>=pivotkey)
+			high--;
+		 L->r[low] = L->r[high];
+		 while(low<high&&L->r[low]<=pivotkey)
+			low++;
+		 L->r[high] = L->r[low];
+	}
+	L->r[low] = L->r[0];
+	return low; /* 返回枢轴所在位置 */
+}
+
 /* 对顺序表L中的子序列L->r[low..high]作快速排序 */
 void QSort(SqList *L,int low,int high)
 { 
 	int pivot;
 	if(low<high)
 	{
-		pivot=Partition(L,low,high); /*  将L->r[low..high]一分为二，算出枢轴值pivot */
+		pivot=Partition1(L,low,high); /*  将L->r[low..high]一分为二，算出枢轴值pivot */
 		QSort(L,low,pivot-1);		/*  对低子表递归排序 */
 		QSort(L,pivot+1,high);		/*  对高子表递归排序 */
 	}
