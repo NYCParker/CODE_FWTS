@@ -10,6 +10,7 @@ using namespace std;
 #include <string>
 #include <stack>
 #include <queue>
+#include <list>
 
 
 
@@ -18,3 +19,4 @@ int main()
 
 	system("pause");
 }
+
