@@ -57,9 +57,11 @@ void inputdeal(void)
 {
 	vector<int> data;
 	int tmp;
+    char x;
 	while (cin>>tmp){
 		data.push_back(tmp);
-		if (cin.get() == '\n') break;
+        x= cin.get();
+		if (x == '\n') break;
 	}
 	for(int j=0;j<data.size();j++)
     {
@@ -111,5 +113,6 @@ int main()
 {
 	string input = "-1,2,1,3,-9,-7,0,1,1";
 	string output = compileSeq(input);
-	cout<<output;
+	cout<<output<<endl;
+    inputdeal();
 }
