@@ -13,7 +13,6 @@ public:
         int maxitem = array[0];
         int sum = 0;
         int i = 0;
-        int flag;
 
         for (i = 0; i < array.size(); i++)
         {
@@ -34,13 +33,12 @@ public:
             else
             {
                 sum = sum + array[i];
-                flag = 1;
             }
         }
 
         sumarr.push_back(sum);
 
-        if(flag == 0)
+        if(sum == 0)
         {
             return maxitem;
         }
